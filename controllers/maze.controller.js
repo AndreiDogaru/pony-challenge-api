@@ -1,11 +1,11 @@
 const uuidv4 = require('uuid/v4');
 
-const { 
-  generateMazeWalls, 
+const {
+  generateMazeWalls,
   calculateNewPonyLocation,
   generateNewDomokunMove,
 } = require('../lib/services/maze');
-const { Maze } = require('./../../lib/db').models;
+const { Maze } = require('../lib/db').models;
 
 /**
  * Create a new maze and return its id.
@@ -16,15 +16,15 @@ module.exports.createMaze = async (data) => {
   }
 
   if (
-    data.width < 15 || data.width > 25 ||
-    data.height < 15 || data.height > 25
+    data.width < 15 || data.width > 25
+    || data.height < 15 || data.height > 25
   ) {
     throw new Error('Maze dimensions must be between 15 and 25');
   }
 
   // generate maze walls
   const walls = generateMazeWalls(data.width, data.height);
-  
+
   // create a new maze and store it in the db
   const mazeData = {
     id: uuidv4(),
@@ -37,7 +37,7 @@ module.exports.createMaze = async (data) => {
   };
   const maze = await Maze
     .create(mazeData)
-    .catch(() => { throw new Error('Failed to create maze') });
+    .catch(() => { throw new Error('Failed to create maze'); });
 
   return maze.id;
 };
@@ -52,7 +52,7 @@ module.exports.getMaze = (mazeId) => {
 
   return Maze
     .findById(mazeId)
-    .catch(() => { throw new Error('Failed to get maze') });
+    .catch(() => { throw new Error('Failed to get maze'); });
 };
 
 /**
@@ -71,9 +71,9 @@ module.exports.move = async (direction, mazeId) => {
   const maze = await module.exports.getMaze(mazeId);
 
   if (maze.state === 'won') {
-    message = 'You won. Game over!'
+    message = 'You won. Game over!';
   } else if (maze.state === 'lost') {
-    message = 'You lost. Killed by monster!'
+    message = 'You lost. Killed by monster!';
   } else {
     // check if the move is accepted and get the new pony location
     const { isMoveAccepted, newPonyLocation } = calculateNewPonyLocation(maze, direction);
@@ -90,6 +90,6 @@ module.exports.move = async (direction, mazeId) => {
 
   return {
     state: maze.state,
-    message
+    message,
   };
 };
