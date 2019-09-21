@@ -86,7 +86,7 @@ module.exports.move = async (direction, mazeId) => {
       // set the new location of pony an domokun
       maze.pony = newPonyLocation;
       maze.domokun = generateNewDomokunMove(maze);
-      
+
       // check if game is over
       if (maze.pony === maze.exit) {
         maze.state = 'won';
