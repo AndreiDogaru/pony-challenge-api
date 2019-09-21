@@ -1,6 +1,6 @@
 # PonyChallengeAPI
 
-This project was created using NodeJS 12 and Express.  
+This project was created using NodeJS 12 and Express.__ 
 Data is stored inside a postgreSQL database.
 Communication with the database is done through sequelize ORM.
 
