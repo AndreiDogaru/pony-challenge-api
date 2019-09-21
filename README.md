@@ -15,5 +15,5 @@ Create a new database ( give it whatever name you entered into the `.env` file )
 
 ## Run the API
 
-( make sure to run `npm install` the first time you set up the project )
 Run `npm start` to start the server.
+( make sure to run `npm install` the first time you set up the project )
