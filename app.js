@@ -1,11 +1,8 @@
 const express = require('express');
-const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express(); // initialize Express
-
-app.use(morgan()); // API Logger
 
 app.use(cors()); // Cross-origin resource sharing
 
