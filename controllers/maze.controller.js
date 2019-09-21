@@ -45,14 +45,20 @@ module.exports.createMaze = async (data) => {
 /**
  * Get an existing maze by id.
  */
-module.exports.getMaze = (mazeId) => {
+module.exports.getMaze = async (mazeId) => {
   if (!mazeId) {
     throw new Error('Please provide an id for the maze');
   }
 
-  return Maze
-    .findById(mazeId)
+  const maze = await Maze
+    .findByPk(mazeId)
     .catch(() => { throw new Error('Failed to get maze'); });
+
+  if (!maze) {
+    throw new Error('Maze not found');
+  }
+
+  return maze;
 };
 
 /**
