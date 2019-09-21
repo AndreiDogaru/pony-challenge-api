@@ -18,4 +18,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/', require('./routes')); // Import routes
 
+// Error handler
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  res.status(500).send(err.message);
+});
+
 module.exports = app;
