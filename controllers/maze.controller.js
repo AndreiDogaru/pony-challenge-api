@@ -39,7 +39,7 @@ module.exports.createMaze = async (data) => {
     .create(mazeData)
     .catch(() => { throw new Error('Failed to create maze'); });
 
-  return maze.id;
+  return { maze_id: maze.id };
 };
 
 /**
@@ -76,11 +76,7 @@ module.exports.move = async (direction, mazeId) => {
   // get maze from db
   const maze = await module.exports.getMaze(mazeId);
 
-  if (maze.state === 'won') {
-    message = 'You won. Game over!';
-  } else if (maze.state === 'lost') {
-    message = 'You lost. Killed by monster!';
-  } else {
+  if (maze.state === 'active') {
     // check if the move is accepted and get the new pony location
     const { isMoveAccepted, newPonyLocation } = calculateNewPonyLocation(maze, direction);
 
@@ -90,9 +86,24 @@ module.exports.move = async (direction, mazeId) => {
       // set the new location of pony an domokun
       maze.pony = newPonyLocation;
       maze.domokun = generateNewDomokunMove(maze);
+      
+      // check if game is over
+      if (maze.pony === maze.exit) {
+        maze.state = 'won';
+      } else if (maze.pony === maze.domokun) {
+        maze.state = 'lost';
+      }
+
+      await maze.save();
     }
   }
 
+  // check if the game has a different state
+  if (maze.state === 'won') {
+    message = 'You won. Game over!';
+  } else if (maze.state === 'lost') {
+    message = 'You lost. Killed by monster!';
+  }
 
   return {
     state: maze.state,
